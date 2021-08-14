@@ -20,6 +20,8 @@ export default class HandlerForward extends HandlerBase {
         reqOpts.method = this.srcRequest.method;
         reqOpts.headers = {};
 
+        if (this.server.httpAgent) reqOpts.agent = this.server.httpAgent;
+
         // TODO:
         //  - We should probably use a raw HTTP message via socket instead of http.request(),
         //    since Node transforms the headers to lower case and thus makes it easy to detect the proxy

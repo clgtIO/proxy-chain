@@ -29,6 +29,8 @@ export default class HandlerTunnelChain extends HandlerBase {
             },
         };
 
+        if (this.server.httpAgent) options.agent = this.server.httpAgent;
+
         maybeAddProxyAuthorizationHeader(this.upstreamProxyUrlParsed, options.headers);
 
         this.trgRequest = http.request(options);

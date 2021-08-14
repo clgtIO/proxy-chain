@@ -100,6 +100,7 @@ export class Server extends EventEmitter {
         this.prepareRequestFunction = options.prepareRequestFunction;
         this.authRealm = options.authRealm || DEFAULT_AUTH_REALM;
         this.verbose = !!options.verbose;
+        this.httpAgent = options.httpAgent;
 
         // Key is handler ID, value is HandlerXxx instance
         this.handlers = {};

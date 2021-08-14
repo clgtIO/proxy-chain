@@ -6,6 +6,38 @@ import {
 // Dictionary, key is value returned from anonymizeProxy(), value is Server instance.
 const anonymizedProxyUrlToServer = {};
 
+export const anonymizeProxyFromAgent = (agent, callback) => {
+    let server;
+
+    const startServer = () => {
+        return Promise.resolve()
+            .then(() => {
+                server = new Server({
+                    verbose: true,
+                    port: 1111,
+                    httpAgent: agent,
+                    prepareRequestFunction: () => {
+                        return {
+                            requestAuthentication: false,
+                            upstreamProxyUrl: 'http://145.239.75.187:1081',
+                        };
+                    },
+                });
+
+                return server.listen();
+            });
+    };
+
+    const promise = startServer()
+        .then(() => {
+            const url = `http://127.0.0.1:${server.port}`;
+            anonymizedProxyUrlToServer[url] = server;
+            return url;
+        });
+
+    return nodeify(promise, callback);
+};
+
 /**
  * Parses and validates a HTTP proxy URL. If the proxy requires authentication, then the function
  * starts an open local proxy server that forwards to the upstream proxy.
